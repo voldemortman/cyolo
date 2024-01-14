@@ -76,3 +76,9 @@ Nest is [MIT licensed](LICENSE).
 ## TODO
 - Add an interceptor that turns the comma seperated values to a list of strings
 - Add an interceptor that turns the stats into an enum
+
+
+## Questions
+- If there are an even amount of words, do I want the average of the middle two or just pick one?
+- Given the two options, what would the user prefer. Posting will take an extra second but the stats will be quicker, or that the posting will be quick and calculating the stats can take another second?
+- Does he prefer his stats to be more reliable or be quicker? Do I need to lock the db when I calculate the stats?
