@@ -1,16 +1,16 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { WordsService } from './words.service';
-import { StatsResults } from './words.types';
+import { StatsResults, StatsType } from './words.types';
 
 @Controller('words')
 export class WordsController {
   private statsActions: {
-    [key: string]: () => StatsResults;
+    [key: number]: () => StatsResults;
   } = {};
   constructor(private wordsService: WordsService) {
-    this.statsActions['top'] = this.wordsService.getTopFive;
-    this.statsActions['median'] = this.wordsService.getMedian;
-    this.statsActions['least'] = this.wordsService.getLeast;
+    this.statsActions[StatsType.Top] = this.wordsService.getTopFive;
+    this.statsActions[StatsType.Median] = this.wordsService.getMedian;
+    this.statsActions[StatsType.Least] = this.wordsService.getLeast;
   }
 
   @Post()
@@ -19,7 +19,7 @@ export class WordsController {
   }
 
   @Get()
-  async GetStats(@Body() statsType: string): Promise<StatsResults> {
+  async GetStats(@Body() statsType: StatsType): Promise<StatsResults> {
     return this.statsActions[statsType]();
   }
 }
