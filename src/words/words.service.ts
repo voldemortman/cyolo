@@ -27,9 +27,13 @@ export class WordsService {
     }
   }
 
-  getTopFive(): string[] {
+  getTopFive(): { [key: string]: number }[] {
     const sortedWords = this.calculateSortedWords();
-    return sortedWords.slice(0, 5);
+    return sortedWords.slice(0, 5).map((word): { [key: string]: number } => {
+      const wordNode = {};
+      wordNode[word] = this.words[word];
+      return wordNode;
+    });
   }
 
   getLeast(): number {
