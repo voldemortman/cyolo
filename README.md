@@ -71,3 +71,8 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+
+## TODO
+- Add an interceptor that turns the comma seperated values to a list of strings
+- Add an interceptor that turns the stats into an enum
