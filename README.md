@@ -80,6 +80,7 @@ Nest is [MIT licensed](LICENSE).
 - Error handling for stats if stat type doesn't exist
 - Do I want to store a sorted array? How would that be scaleable?
 - Maybe get least should be called get least frequency cause it's confusing.
+- Make async
 
 ## Questions
 - If there are an even amount of words, do I want the average of the middle two or just pick one?
