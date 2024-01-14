@@ -74,15 +74,14 @@ Nest is [MIT licensed](LICENSE).
 
 
 ## TODO
-- Add a pipe that turns the comma seperated values to a list of strings
-- Add a pipe that turns the stats into an enum
+- Do I need to register the ParseWordListPipe in the module?
 - Add an sqljs db
 - Error handling for stats if stat type doesn't exist
 - Do I want to store a sorted array? How would that be scaleable?
 - Maybe get least should be called get least frequency cause it's confusing.
 - Make async
-- Add swagger
-- Add tests/remove tests files
+- Add swagger- Add tests/remove tests files
+
 
 ## Questions
 - If there are an even amount of words, do I want the average of the middle two or just pick one?
