@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { WordNode } from './words.types';
 
 @Injectable()
 export class WordsService {
@@ -27,11 +28,10 @@ export class WordsService {
     }
   }
 
-  getTopFive(): { [key: string]: number }[] {
+  getTopFive(): WordNode[] {
     const sortedWords = this.calculateSortedWords();
-    return sortedWords.slice(0, 5).map((word): { [key: string]: number } => {
-      const wordNode = {};
-      wordNode[word] = this.words[word];
+    return sortedWords.slice(0, 5).map((word): WordNode => {
+      const wordNode: WordNode = { word, frequency: this.words[word] };
       return wordNode;
     });
   }
