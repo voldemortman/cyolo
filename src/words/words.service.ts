@@ -9,7 +9,7 @@ export class WordsService {
       if (word in this.words) {
         this.words[word]++;
       } else {
-        this.words[word] = 0;
+        this.words[word] = 1;
       }
     });
   }
