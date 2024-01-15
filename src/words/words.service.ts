@@ -1,22 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { WordNode } from './words.types';
+import { WordNode } from './words.entities';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class WordsService {
+  constructor(
+    @InjectRepository(WordNode)
+    private wordNodeRepository: Repository<WordNode>,
+  ) {}
   private readonly words: { [key: string]: number } = {};
 
-  addWords(words: string[]) {
-    words.forEach((word) => {
-      if (word in this.words) {
-        this.words[word]++;
+  async addWords(words: string[]): Promise<void> {
+    words.forEach(async (word) => {
+      const wordNode = await this.wordNodeRepository.findOneBy({ word });
+      if (wordNode) {
+        wordNode.frequency++;
+        this.wordNodeRepository.save(wordNode);
       } else {
-        this.words[word] = 1;
+        this.wordNodeRepository.save({ word, frequency: 1 });
       }
     });
   }
 
-  getMedian(): number {
-    const sortedFrequencies = this.calculateSortedFrequencies();
+  async getMedian(): Promise<number> {
+    const sortedFrequencies = await this.calculateSortedFrequencies();
     const length = sortedFrequencies.length;
 
     if (length % 2 === 0) {
@@ -28,26 +36,31 @@ export class WordsService {
     }
   }
 
-  getTopFive(): WordNode[] {
-    const sortedWords = this.calculateSortedWords();
-    return sortedWords.slice(0, 5).map((word): WordNode => {
-      const wordNode: WordNode = { word, frequency: this.words[word] };
-      return wordNode;
-    });
+  async getTopFive(): Promise<WordNode[]> {
+    const sortedWords = await this.calculateSortedWords();
+    return await Promise.all(
+      sortedWords.slice(0, 5).map(async (word): Promise<WordNode> => {
+        return await this.wordNodeRepository.findOneBy({ word });
+      }),
+    );
   }
 
-  getLeast(): number {
-    const sortedFrequencies = this.calculateSortedFrequencies();
+  async getLeast(): Promise<number> {
+    const sortedFrequencies = await this.calculateSortedFrequencies();
     return sortedFrequencies[0];
   }
 
-  private calculateSortedFrequencies(): number[] {
-    return Object.values(this.words).sort((a, b) => a - b);
+  private async calculateSortedFrequencies(): Promise<number[]> {
+    const words = await this.wordNodeRepository.find();
+    return words.map(({ frequency }) => frequency).sort((a, b) => a - b);
   }
 
-  private calculateSortedWords(): string[] {
-    return Object.keys(this.words).sort((a, b): number => {
-      return this.words[b] - this.words[a];
-    });
+  private async calculateSortedWords(): Promise<string[]> {
+    const words = await this.wordNodeRepository.find();
+    return words
+      .map(({ word }) => word)
+      .sort((a, b): number => {
+        return this.words[b] - this.words[a];
+      });
   }
 }

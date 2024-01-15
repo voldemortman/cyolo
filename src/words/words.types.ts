@@ -1,7 +1,4 @@
-export type WordNode = {
-  word: string;
-  frequency: number;
-};
+import { WordNode } from './words.entities';
 
 export type StatsResults = number | WordNode[];
 

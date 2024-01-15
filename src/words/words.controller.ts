@@ -13,7 +13,7 @@ import { ParseWordListPipe } from './words.pipes';
 @Controller('words')
 export class WordsController {
   private statsActions: {
-    [key: number]: () => StatsResults;
+    [key: number]: () => Promise<StatsResults>;
   } = {};
   constructor(private wordsService: WordsService) {
     this.statsActions[StatsType.Top] = this.wordsService.getTopFive;
@@ -24,13 +24,13 @@ export class WordsController {
   @Post()
   @UsePipes(ParseWordListPipe)
   async PostWords(@Body('words') words: string[]): Promise<void> {
-    this.wordsService.addWords(words);
+    await this.wordsService.addWords(words);
   }
 
   @Get()
   async GetStats(
     @Body('statsType', ParseEnumPipe) statsType: StatsType,
   ): Promise<StatsResults> {
-    return this.statsActions[statsType]();
+    return await this.statsActions[statsType]();
   }
 }

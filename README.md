@@ -81,6 +81,7 @@ Nest is [MIT licensed](LICENSE).
 - Maybe get least should be called get least frequency cause it's confusing.
 - Add an sqljs db
 - Add tests/remove tests files
+- Move sqljs config to config file
 
 
 ## Questions
