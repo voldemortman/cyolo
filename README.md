@@ -74,13 +74,13 @@ Nest is [MIT licensed](LICENSE).
 
 
 ## TODO
+- Make async
+- Add swagger
 - Do I need to register the ParseWordListPipe in the module?
-- Add an sqljs db
-- Error handling for stats if stat type doesn't exist
 - Do I want to store a sorted array? How would that be scaleable?
 - Maybe get least should be called get least frequency cause it's confusing.
-- Make async
-- Add swagger- Add tests/remove tests files
+- Add an sqljs db
+- Add tests/remove tests files
 
 
 ## Questions

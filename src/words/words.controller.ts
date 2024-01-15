@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { WordsService } from './words.service';
 import { StatsResults, StatsType } from './words.types';
-import { ParseWordListPipe } from './words.pipe';
+import { ParseWordListPipe } from './words.pipes';
 
 @Controller('words')
 export class WordsController {
