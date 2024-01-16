@@ -1,14 +1,13 @@
-import {
-  Body,
-  Controller,
-  Get,
-  ParseEnumPipe,
-  Post,
-  UsePipes,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
 import { WordsService } from './words.service';
-import { StatsResults, StatsType } from './words.types';
+import {
+  GetStatsDTO,
+  PostWordsDTO,
+  StatsResults,
+  StatsType,
+} from './words.types';
 import { ParseWordListPipe } from './words.pipes';
+import { ApiBody } from '@nestjs/swagger';
 
 @Controller('words')
 export class WordsController {
@@ -22,15 +21,28 @@ export class WordsController {
   }
 
   @Post()
+  @ApiBody({
+    description: 'Comma-separated string of words',
+    required: true,
+    type: PostWordsDTO,
+    examples: {
+      example1: {
+        value: { words: 'word1, word2, word3' },
+        summary: 'An example with multiple words',
+      },
+      example2: {
+        value: { words: 'singleword' },
+        summary: 'An example with a single word',
+      },
+    },
+  })
   @UsePipes(ParseWordListPipe)
-  async PostWords(@Body('words') words: string[]): Promise<void> {
+  async PostWords(@Body() words: string[]): Promise<void> {
     await this.wordsService.addWords(words);
   }
 
   @Get()
-  async GetStats(
-    @Body('statsType', ParseEnumPipe) statsType: StatsType,
-  ): Promise<StatsResults> {
+  async GetStats(@Query() { statsType }: GetStatsDTO): Promise<StatsResults> {
     return await this.statsActions[statsType]();
   }
 }
