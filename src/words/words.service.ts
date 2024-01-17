@@ -25,57 +25,40 @@ export class WordsService {
     }
   }
 
+  getTopFive = async (): Promise<WordNode[]> => {
+    const words = await this.wordNodeRepository.find({
+      order: {
+        frequency: 'DESC',
+      },
+    });
+    return words.slice(0, 5).map(({ word, frequency }) => {
+      return { word, frequency };
+    });
+  };
+
   getMedian = async (): Promise<number> => {
-    const words = await this.wordNodeRepository.find();
-    const sortedFrequencies = this.calculateSortedFrequencies(words);
-    const length = sortedFrequencies.length;
+    const words = await this.wordNodeRepository.find({
+      order: {
+        frequency: 'ASC',
+      },
+    });
+    const length = words.length;
 
     if (length % 2 === 0) {
-      const middle1 = sortedFrequencies[length / 2 - 1];
-      const middle2 = sortedFrequencies[length / 2];
+      const middle1 = words[length / 2 - 1].frequency;
+      const middle2 = words[length / 2].frequency;
       return (middle1 + middle2) / 2;
     } else {
-      return sortedFrequencies[Math.floor(length / 2)];
+      return words[Math.floor(length / 2)].frequency;
     }
   };
 
-  getTopFive = async (): Promise<WordNode[]> => {
-    const words = await this.wordNodeRepository.find();
-    const wordsDict = this.convertAllWordsToDict(words);
-    const sortedWords = this.calculateSortedWords(wordsDict);
-    return sortedWords.slice(0, 5).map((word) => {
-      return {
-        word,
-        frequency: wordsDict[word],
-      };
-    });
-  };
-
   getLeast = async (): Promise<number> => {
-    const words = await this.wordNodeRepository.find();
-    const sortedFrequencies = this.calculateSortedFrequencies(words);
-    return sortedFrequencies[0];
-  };
-
-  private calculateSortedFrequencies = (words: Word[]): number[] => {
-    return words.map(({ frequency }) => frequency).sort((a, b) => a - b);
-  };
-
-  private calculateSortedWords = (wordsDict: {
-    [key: string]: number;
-  }): string[] => {
-    return Object.keys(wordsDict).sort((a, b): number => {
-      return wordsDict[b] - wordsDict[a];
+    const words = await this.wordNodeRepository.find({
+      order: {
+        frequency: 'ASC',
+      },
     });
-  };
-
-  private convertAllWordsToDict = (
-    words: Word[],
-  ): { [key: string]: number } => {
-    const wordsDict = {};
-    words.forEach((word) => {
-      wordsDict[word.word] = word.frequency;
-    });
-    return wordsDict;
+    return words[0].frequency;
   };
 }

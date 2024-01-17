@@ -74,7 +74,6 @@ Nest is [MIT licensed](LICENSE).
 
 
 ## TODO
-- Add swagger
 - Do I want to store a sorted array? How would that be scaleable?
 - Add tests/remove tests files
 - Move sqljs config to config file
