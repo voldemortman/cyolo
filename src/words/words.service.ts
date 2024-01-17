@@ -30,8 +30,9 @@ export class WordsService {
       order: {
         frequency: 'DESC',
       },
+      take: 5,
     });
-    return words.slice(0, 5).map(({ word, frequency }) => {
+    return words.map(({ word, frequency }) => {
       return { word, frequency };
     });
   };
@@ -58,6 +59,7 @@ export class WordsService {
       order: {
         frequency: 'ASC',
       },
+      take: 1,
     });
     return words[0].frequency;
   };
