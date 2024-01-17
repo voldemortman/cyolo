@@ -37,8 +37,8 @@ export class WordsController {
     },
   })
   @UsePipes(ParseWordListPipe)
-  async PostWords(@Body() words: string[]): Promise<void> {
-    await this.wordsService.addWords(words);
+  PostWords(@Body() words: string[]): void {
+    this.wordsService.addWords(words);
   }
 
   @Get()

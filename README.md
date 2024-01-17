@@ -9,3 +9,7 @@ I figured that when this will scale the easiest way to store it will be in some 
 In my opinion storing the data this way optimizes the retrival for all stats as a whole, which is a good starting point. When we grow in scale and have real data about how many times each stat is used, it will be possible to store the data in a different way that optimizes the calculation for a specific stat.
 
 We can also save the result of each stat when called and say that it is void when some word is inserted that makes it no longer true. For example, we can cache the least in a non complex way. The first time you calculate the least you cache it, and then you save that cache until the next time someone posts that word. However, in a system with a large scale that means adding latency to every request, since we now need to access a remote cache that can be shared between services. In my opinion that is not worth it.
+
+Also, in order to best handle multiple users, I don't want the post to be sync. So I don't await my call to save the words.
+
+Another final note is that in the future we might want to change the saving of a word that exists to increment it directly using an sql query instead of retrieving the value and then adding one. This will help prevent conflicts in case two users post the same word at the same time.
